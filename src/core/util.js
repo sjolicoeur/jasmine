@@ -100,5 +100,41 @@ getJasmineRequireObj().util = function(j$) {
     return Object.prototype.hasOwnProperty.call(obj, key);
   };
 
+  function anyMatch(pattern, lines) {
+    var i;
+
+    for (i = 0; i < lines.length; i++) {
+      if (lines[i].match(pattern)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  util.callerFile = function() {
+    var lines = new Error().stack.split('\n');
+    var match, fileAndLineAndCol;
+
+    if (anyMatch(/callerFile@/, lines)) {
+      // Safari style
+      // e.g. 'func@http://example.com/jasmine.js:2379:19'
+      // or 'http://example.com/jasmine.js:2379:19'
+      match = lines[1].match(/@(.*$)/);
+      fileAndLineAndCol = match ? match[1] : lines[1];
+    } else if (anyMatch(/at .*callerFile \(.*\)/, lines)) {
+      // Chrome and Node style
+      match = lines[2].match(/\(([^\)]+)\)$/);
+      fileAndLineAndCol = match[1];
+    }
+
+    if (fileAndLineAndCol) {
+      // Strip line and column
+      return fileAndLineAndCol.replace(/:\d+:\d+$/, '');
+    }
+
+    return null;
+  };
+
   return util;
 };

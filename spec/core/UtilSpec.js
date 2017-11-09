@@ -91,6 +91,24 @@ describe("jasmineUnderTest.util", function() {
 
       expect(jasmineUnderTest.util.objectDifference(a, b)).toEqual({x: 1});
       expect(jasmineUnderTest.util.objectDifference(b, a)).toEqual({y: 2});
-    })
-  })
+    });
+  });
+
+  describe("callerFilename", function() {
+    it("returns the path of the file containing an anonymous caller", function() {
+      var filename = jasmineUnderTest.util.callerFile();
+      expect(filename).toMatch(/UtilSpec.js$/);
+    });
+
+    it("returns the path of the file containing a named caller", function() {
+      function foo() {
+        debugger;
+        return jasmineUnderTest.util.callerFile();
+      }
+
+      var filename = foo();
+      expect(filename).toMatch(/UtilSpec.js$/);
+      expect(filename).not.toMatch(/foo@/);
+    });
+  });
 });
