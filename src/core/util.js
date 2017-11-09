@@ -122,17 +122,22 @@ getJasmineRequireObj().util = function(j$) {
 
   util.callerFile = function() {
     var lines = errorWithStack().stack.split('\n');
-    var match, fileAndLineAndCol;
+    var line, match, fileAndLineAndCol;
 
     if (anyMatch(/callerFile@/, lines)) {
-      // Safari and PhantomJS style
+      // Safari, Firefox, and PhantomJS on OS X
       // e.g. 'func@http://example.com/jasmine.js:2379:19'
       // or 'http://example.com/jasmine.js:2379:19'
       match = lines[2].match(/@(.*$)/);
       fileAndLineAndCol = match ? match[1] : lines[2];
     } else if (anyMatch(/at .*callerFile \(.*\)/, lines)) {
-      // Chrome and Node style
-      match = lines[3].match(/\(([^\)]+)\)$/);
+      // Chrome, Node, and PhantomJS on Linux
+      if (lines[0].match(/^Error/)) {
+        line = lines[3];
+      } else {
+        line = lines[2]; // PhantomJS
+      }
+      match = line.match(/\(([^\)]+)\)$/);
       fileAndLineAndCol = match[1];
     }
 
