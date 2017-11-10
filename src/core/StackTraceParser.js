@@ -33,8 +33,8 @@ getJasmineRequireObj().StackTraceParser = function(j$) {
   // regexes should capture the function name (if any) as group 1
   // and the file, line, and column as group 2.
   function tryParseFrames(lines) {
-    var converted = lines.map(function(line) {
-      return first(framePatterns, function(pattern) {
+    return lines.map(function(line) {
+      var convertedLine = first(framePatterns, function(pattern) {
         var overallMatch = line.match(pattern.re),
           fileLineColMatch;
         if (!overallMatch) { return null; }
@@ -44,14 +44,15 @@ getJasmineRequireObj().StackTraceParser = function(j$) {
         if (!fileLineColMatch) { return null; }
 
         return {
+          raw: line,
           file: fileLineColMatch[1],
           line: parseInt(fileLineColMatch[2], 10),
           func: overallMatch[pattern.fnIx]
         };
       });
-    });
 
-    return converted.indexOf(undefined) === -1 ? converted : null;
+      return convertedLine || { raw: line };
+    });
   }
 
   function first(items, fn) {
