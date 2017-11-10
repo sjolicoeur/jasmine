@@ -102,7 +102,6 @@ describe("jasmineUnderTest.util", function() {
 
     it("returns the path of the file containing a named caller", function() {
       function foo() {
-        debugger;
         return jasmineUnderTest.util.callerFile();
       }
 
