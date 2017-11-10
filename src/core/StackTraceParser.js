@@ -1,7 +1,9 @@
-getJasmineRequireObj().StackTrace = function(j$) {
-  function StackTrace(rawTrace) {
-    var lines = rawTrace.split('\n');
-    this.frames = extractFrames(lines);
+getJasmineRequireObj().StackTraceParser = function(j$) {
+  function StackTraceParser() {
+    this.parse = function(rawTrace) {
+      var lines = rawTrace.split('\n');
+      return extractFrames(lines);
+    };
   }
 
   function extractFrames(lines) {
@@ -48,5 +50,5 @@ getJasmineRequireObj().StackTrace = function(j$) {
     return converted[0] ? converted : null;
   }
 
-  return StackTrace;
+  return StackTraceParser;
 };
