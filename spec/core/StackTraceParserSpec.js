@@ -94,7 +94,16 @@ describe("StackTraceParser", function() {
       '    which was called from somewhere else.';
 
     var frames = new jasmineUnderTest.StackTraceParser().parse(raw);
-
     expect(frames).toBeNull();
-});
+  });
+
+  it("returns null if only some frames parse", function() {
+    var raw = 
+      '    at UserContext.<anonymous> (http://localhost:8888/__spec__/core/UtilSpec.js:115:19)\n' +
+      '    but this is quite unexpected\n' +
+      '    at QueueRunner.run (http://localhost:8888/__jasmine__/jasmine.js:4320:20)';
+
+    var frames = new jasmineUnderTest.StackTraceParser().parse(raw);
+    expect(frames).toBeNull();
+  });
 });

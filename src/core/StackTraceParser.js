@@ -47,7 +47,7 @@ getJasmineRequireObj().StackTraceParser = function(j$) {
       };
     });
 
-    return converted[0] ? converted : null;
+    return converted.indexOf(null) === -1 ? converted : null;
   }
 
   return StackTraceParser;
