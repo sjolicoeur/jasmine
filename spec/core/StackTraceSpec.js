@@ -62,6 +62,12 @@ describe("StackTrace", function() {
       ]);
     });
 
+    it("does not mistake gibberish for Safari/Firefox/Phantom-OS X style traces", function() {
+      var raw = 'randomcharsnotincludingwhitespace';
+      var stackTrace = new jasmineUnderTest.StackTrace(raw);
+      expect(stackTrace.frames).toBeNull();
+    });
+
     it("understands Phantom-Linux style traces", function() {
       var raw = 
         '    at UserContext.<anonymous> (http://localhost:8888/__spec__/core/UtilSpec.js:115:19)\n' +

@@ -44,6 +44,11 @@ getJasmineRequireObj().StackTrace = function(j$) {
         }
 
         result = split(match[3]);
+
+        if (!result) {
+          return null;
+        }
+
         result.func = match[2];
         return result;
       });
@@ -51,7 +56,6 @@ getJasmineRequireObj().StackTrace = function(j$) {
       return converted[0] ? converted : null;
     }
   ];
-
 
   function extractFrames(lines) {
     var i, result;
