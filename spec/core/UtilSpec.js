@@ -102,18 +102,13 @@ describe("jasmineUnderTest.util", function() {
 
     it("returns the path of the file containing a named caller", function() {
       function foo() {
+        debugger;
         return jasmineUnderTest.util.callerFile();
       }
 
       var filename = foo();
       expect(filename).toMatch(/UtilSpec.js$/);
       expect(filename).not.toMatch(/foo@/);
-    });
-
-    it("tells me what stack traces look like", function() {
-      var error;
-      try { throw new Error("nope"); } catch(e) { error = e; }
-      expect(error.stack).toBe('');
     });
   });
 });
