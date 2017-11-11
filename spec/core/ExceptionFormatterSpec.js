@@ -74,7 +74,7 @@ describe("ExceptionFormatter", function() {
     });
 
     it("filters Jasmine stack frames in this environment", function() {
-      var error;
+      var error, i;
       try { throw new Error("an error"); } catch(e) { error = e; }
       var subject = new jasmineUnderTest.ExceptionFormatter({
         jasmineFile: jasmine.util.jasmineFile()
@@ -86,23 +86,13 @@ describe("ExceptionFormatter", function() {
         lines.shift();
       }
 
-      expect(lines.length).toEqual(2);
       expect(lines[0]).toMatch(/ExceptionFormatterSpec.js/);
       expect(lines[1]).toEqual('    at <Jasmine>');
 
-      /*
-Error: an error
-    at UserContext.<anonymous> (http://localhost:8888/__spec__/core/ExceptionFormatterSpec.js:59:19)
-    at attempt (http://localhost:8888/__jasmine__/jasmine.js:4392:46)
-    at QueueRunner.run (http://localhost:8888/__jasmine__/jasmine.js:4320:20)
-    at QueueRunner.execute (http://localhost:8888/__jasmine__/jasmine.js:4302:10)
-    at Spec.queueRunnerFactory (http://localhost:8888/__jasmine__/jasmine.js:974:35)
-    at Spec.execute (http://localhost:8888/__jasmine__/jasmine.js:574:10)
-    at UserContext.fn (http://localhost:8888/__jasmine__/jasmine.js:5515:37)
-    at attempt (http://localhost:8888/__jasmine__/jasmine.js:4400:26)
-    at QueueRunner.run (http://localhost:8888/__jasmine__/jasmine.js:4320:20)
-    at runNext (http://localhost:8888/__jasmine__/jasmine.js:4360:20)
-*/      
+      // Node has some number of additional frames below Jasmine.
+      for (i = 2; i < lines.length; i++) {
+        expect(lines[i]).not.toMatch(/jasmine.js/);
+      }
     });
 
     it("returns null if no Error provided", function() {
