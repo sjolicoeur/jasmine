@@ -1,15 +1,19 @@
 getJasmineRequireObj().StackTraceParser = function(j$) {
   function StackTraceParser() {
     this.parse = function(rawTrace) {
+      var message = null;
       var lines = rawTrace
         .split('\n')
         .filter(function(line) { return line !== ''; });
 
-      // Some platforms include the error message in the stack trace. Remove it.
       if (lines[0].match(/^Error/)) {
-        lines = lines.slice(1);
+        message = lines.shift();
       }
-      return tryParseFrames(lines) || null;
+
+      return {
+        message: message,
+        frames: tryParseFrames(lines) || null
+      };
     };
   }
 

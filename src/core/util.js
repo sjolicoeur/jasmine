@@ -122,8 +122,8 @@ getJasmineRequireObj().util = function(j$) {
 
   util.callerFile = function() {
     var stackParser = new j$.StackTraceParser();
-    var frames = stackParser.parse(errorWithStack().stack);
-    return frames[2].file;
+    var trace = stackParser.parse(errorWithStack().stack);
+    return trace.frames[2].file;
   };
 
   return util;
