@@ -29,6 +29,7 @@ getJasmineRequireObj().Env = function(j$) {
     var random = true;
     var seed = null;
     var suppressLoadErrors = false;
+    var hasFailures = false;
 
     var currentSuite = function() {
       return currentlyExecutingSuites[currentlyExecutingSuites.length - 1];
@@ -278,9 +279,6 @@ getJasmineRequireObj().Env = function(j$) {
 
     this.execute = function(runnablesToRun) {
       globalErrors.popListener();
-      var statusRecorder = new StatusRecordingReporter();
-      reporter.addInternalReporter(statusRecorder);
-
 
       if(!runnablesToRun) {
         if (focusedRunnables.length) {
@@ -314,6 +312,10 @@ getJasmineRequireObj().Env = function(j$) {
           }
           currentlyExecutingSuites.pop();
           reporter.suiteDone(result);
+
+          if (result.status === 'failed') {
+            hasFailures = true;
+          }
         },
         orderChildren: function(node) {
           return order.sort(node.children);
@@ -342,7 +344,7 @@ getJasmineRequireObj().Env = function(j$) {
         currentlyExecutingSuites.pop();
         var overallStatus;
 
-        if (statusRecorder.hasFailures || topSuite.result.failedExpectations.length > 0) {
+        if (hasFailures || topSuite.result.failedExpectations.length > 0) {
           overallStatus = 'failed';
         } else if (focusedRunnables.length > 0) {
           overallStatus = 'incomplete';
@@ -550,6 +552,10 @@ getJasmineRequireObj().Env = function(j$) {
         clearResourcesForRunnable(spec.id);
         currentSpec = null;
         reporter.specDone(result);
+
+        if (result.status === 'failed') {
+          hasFailures = true;
+        }
       }
 
       function specStarted(spec) {
@@ -681,22 +687,6 @@ getJasmineRequireObj().Env = function(j$) {
       }
     };
   }
-
-  function StatusRecordingReporter() {
-    this.hasFailures = false;
-  }
-
-  StatusRecordingReporter.prototype.specDone = function(e) {
-    if (e.status === 'failed') {
-      this.hasFailures = true;
-    }
-  };
-
-  StatusRecordingReporter.prototype.suiteDone = function(e) {
-    if (e.status === 'failed') {
-      this.hasFailures = true;
-    }
-  };
 
   return Env;
 };
