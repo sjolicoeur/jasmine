@@ -278,6 +278,9 @@ getJasmineRequireObj().Env = function(j$) {
 
     this.execute = function(runnablesToRun) {
       globalErrors.popListener();
+      var statusRecorder = new StatusRecordingReporter();
+      reporter.addInternalReporter(statusRecorder);
+
 
       if(!runnablesToRun) {
         if (focusedRunnables.length) {
@@ -337,14 +340,25 @@ getJasmineRequireObj().Env = function(j$) {
       processor.execute(function() {
         clearResourcesForRunnable(topSuite.id);
         currentlyExecutingSuites.pop();
+        var overallStatus;
+
+        if (statusRecorder.hasFailures || topSuite.result.failedExpectations.length > 0) {
+          overallStatus = 'failed';
+        } else if (focusedRunnables.length > 0) {
+          overallStatus = 'incomplete';
+        } else {
+          overallStatus = 'passed';
+        }
 
         /**
          * Information passed to the {@link Reporter#jasmineDone} event.
          * @typedef JasmineDoneInfo
+         * @property {OverallStatus} - The overall result of the sute: 'passed', 'failed', or 'incomplete'.
          * @property {Order} order - Information about the ordering (random or not) of this execution of the suite.
          * @property {Expectation[]} failedExpectations - List of expectations that failed in an {@link afterAll} at the global level.
          */
         reporter.jasmineDone({
+          overallStatus: overallStatus,
           order: order,
           failedExpectations: topSuite.result.failedExpectations
         });
@@ -667,6 +681,22 @@ getJasmineRequireObj().Env = function(j$) {
       }
     };
   }
+
+  function StatusRecordingReporter() {
+    this.hasFailures = false;
+  }
+
+  StatusRecordingReporter.prototype.specDone = function(e) {
+    if (e.status === 'failed') {
+      this.hasFailures = true;
+    }
+  };
+
+  StatusRecordingReporter.prototype.suiteDone = function(e) {
+    if (e.status === 'failed') {
+      this.hasFailures = true;
+    }
+  };
 
   return Env;
 };
