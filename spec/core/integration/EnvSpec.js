@@ -2215,6 +2215,22 @@ describe("Env integration", function() {
       });
     });
 
+    describe('When there are no specs', function() {
+      it('is "incomplete"', function(done) {
+        var env = new jasmineUnderTest.Env(),
+          reporter = jasmine.createSpyObj('reporter', ['jasmineDone', 'suiteDone', 'specDone']);
+    
+        reporter.jasmineDone.and.callFake(function(e) {
+          expect(e.overallStatus).toEqual('incomplete');
+          expect(e.incompleteReason).toEqual('No specs found');
+          done();
+        });
+    
+        env.addReporter(reporter);
+        env.execute();
+      });
+    });
+
     describe('When a spec is focused', function() {
       it('is "incomplete"', function(done) {
         var env = new jasmineUnderTest.Env(),

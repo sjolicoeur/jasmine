@@ -349,6 +349,9 @@ getJasmineRequireObj().Env = function(j$) {
         } else if (focusedRunnables.length > 0) {
           overallStatus = 'incomplete';
           incompleteReason = 'fit() or fdescribe() was found';
+        } else if (totalSpecsDefined === 0) {
+          overallStatus = 'incomplete';
+          incompleteReason = 'No specs found';
         } else {
           overallStatus = 'passed';
         }
