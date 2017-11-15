@@ -2191,6 +2191,30 @@ describe("Env integration", function() {
       });
     });
 
+    describe("When there are load errors", function() {
+      it('is "failed"', function(done) {
+        var global = {
+          setTimeout: function(fn, delay) { setTimeout(fn, delay) },
+          clearTimeout: function(fn, delay) { clearTimeout(fn, delay) },
+        };
+        spyOn(jasmineUnderTest, 'getGlobal').and.returnValue(global);
+
+        var env = new jasmineUnderTest.Env();
+        var reporter = jasmine.createSpyObj('reporter', ['jasmineDone', 'suiteDone', 'specDone']);
+    
+        reporter.jasmineDone.and.callFake(function(e) {
+          debugger;
+          expect(e.overallStatus).toEqual('failed');
+          done();
+        });
+    
+        env.addReporter(reporter);
+        env.it('passes', function() {});
+        global.onerror('Uncaught Error: ENOCHEESE');
+        env.execute();
+      });
+    });
+
     describe('When a spec is focused', function() {
       it('is "incomplete"', function(done) {
         var env = new jasmineUnderTest.Env(),
