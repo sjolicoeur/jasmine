@@ -2226,5 +2226,24 @@ describe("Env integration", function() {
         env.execute();
       });
     });
+
+    describe('When there are both failures and focused specs', function() {
+      it('is "failed"', function(done) {
+        var env = new jasmineUnderTest.Env(),
+          reporter = jasmine.createSpyObj('reporter', ['jasmineDone', 'suiteDone', 'specDone']);
+    
+        reporter.jasmineDone.and.callFake(function(e) {
+          expect(e.overallStatus).toEqual('failed');
+          expect(e.incompleteReason).toBeUndefined();
+          done();
+        });
+    
+        env.addReporter(reporter);
+        env.fit('is focused', function() {
+          env.expect(true).toBe(false);
+        });
+        env.execute();
+      });
+    });
   });
 });
