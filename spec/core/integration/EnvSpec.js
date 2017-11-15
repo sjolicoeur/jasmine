@@ -2198,6 +2198,7 @@ describe("Env integration", function() {
     
         reporter.jasmineDone.and.callFake(function(e) {
           expect(e.overallStatus).toEqual('incomplete');
+          expect(e.incompleteReason).toEqual('fit() or fdescribe() was found');
           done();
         });
     
@@ -2214,6 +2215,7 @@ describe("Env integration", function() {
     
         reporter.jasmineDone.and.callFake(function(e) {
           expect(e.overallStatus).toEqual('incomplete');
+          expect(e.incompleteReason).toEqual('fit() or fdescribe() was found');
           done();
         });
     

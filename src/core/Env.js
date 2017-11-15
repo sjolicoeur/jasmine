@@ -342,12 +342,13 @@ getJasmineRequireObj().Env = function(j$) {
       processor.execute(function() {
         clearResourcesForRunnable(topSuite.id);
         currentlyExecutingSuites.pop();
-        var overallStatus;
+        var overallStatus, incompleteReason;
 
         if (hasFailures || topSuite.result.failedExpectations.length > 0) {
           overallStatus = 'failed';
         } else if (focusedRunnables.length > 0) {
           overallStatus = 'incomplete';
+          incompleteReason = 'fit() or fdescribe() was found';
         } else {
           overallStatus = 'passed';
         }
@@ -356,11 +357,13 @@ getJasmineRequireObj().Env = function(j$) {
          * Information passed to the {@link Reporter#jasmineDone} event.
          * @typedef JasmineDoneInfo
          * @property {OverallStatus} - The overall result of the sute: 'passed', 'failed', or 'incomplete'.
+         * @property {IncompleteReason} - Explanation of why the suite was incimplete.
          * @property {Order} order - Information about the ordering (random or not) of this execution of the suite.
          * @property {Expectation[]} failedExpectations - List of expectations that failed in an {@link afterAll} at the global level.
          */
         reporter.jasmineDone({
           overallStatus: overallStatus,
+          incompleteReason: incompleteReason,
           order: order,
           failedExpectations: topSuite.result.failedExpectations
         });
