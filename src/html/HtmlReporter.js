@@ -196,10 +196,17 @@ jasmineRequire.HtmlReporter = function(j$) {
       if (totalSpecsDefined > 0 || failed) {
         statusBarMessage += pluralize('spec', specsExecuted) + ', ' + pluralize('failure', failureCount);
         if (pendingSpecCount) { statusBarMessage += ', ' + pluralize('pending spec', pendingSpecCount); }
-        statusBarClassName += failed ? 'jasmine-failed' : 'jasmine-passed';
       } else {
         statusBarClassName += 'jasmine-skipped';
         statusBarMessage += 'No specs found';
+      }
+
+      if (doneResult.overallStatus === 'passed') {
+        statusBarClassName += ' jasmine-passed ';
+      } else if (doneResult.overallStatus === 'incomplete') {
+        statusBarClassName += ' jasmine-incomplete ';
+      } else {
+        statusBarClassName += ' jasmine-failed ';
       }
 
       var seedBar;
