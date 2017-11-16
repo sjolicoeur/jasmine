@@ -745,27 +745,6 @@ describe("HtmlReporter", function() {
       });
     });
 
-    it("shows a message if no specs are run", function(){
-      var env, container, reporter;
-      env = new jasmineUnderTest.Env();
-      container = document.createElement("div");
-      var getContainer = function() { return container; },
-      reporter = new jasmineUnderTest.HtmlReporter({
-        env: env,
-        getContainer: getContainer,
-        createElement: function() { return document.createElement.apply(document, arguments); },
-        createTextNode: function() { return document.createTextNode.apply(document, arguments); }
-      });
-      reporter.initialize();
-
-      reporter.jasmineStarted({});
-      reporter.jasmineDone({});
-
-      var alertBars = container.querySelectorAll(".jasmine-alert .jasmine-bar");
-      expect(alertBars[0].getAttribute('class')).toMatch(/jasmine-skipped/);
-      expect(alertBars[0].innerHTML).toMatch(/No specs found/);
-    });
-
     describe("and all specs pass", function() {
       var env, container, reporter;
       beforeEach(function() {
@@ -1079,11 +1058,13 @@ describe("HtmlReporter", function() {
         reporter.jasmineStarted({});
         reporter.jasmineDone({
           overallStatus: 'incomplete',
+          incompleteReason: 'because nope',
           failedExpectations: []
         });
   
         var alertBar = container.querySelector(".jasmine-overall-result");
         expect(alertBar.classList).toContain("jasmine-incomplete");
+        expect(alertBar.textContent).toContain("Incomplete: because nope");
       });
     });
   });
