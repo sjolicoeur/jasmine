@@ -154,7 +154,7 @@ describe("TreeProcessor", function() {
     });
   });
 
-  it("marks the run order invalid if it would re-enter a node that does not allow re-entry", function() {
+  fit("marks the run order invalid if it would re-enter a node that does not allow re-entry", function() {
     var leaf1 = new Leaf(),
         leaf2 = new Leaf(),
         leaf3 = new Leaf(),
@@ -163,7 +163,9 @@ describe("TreeProcessor", function() {
         processor = new jasmineUnderTest.TreeProcessor({ tree: root, runnableIds: [leaf1.id, leaf3.id, leaf2.id] }),
         result = processor.processTree();
 
-    expect(result).toEqual({ valid: false });
+    // expect(result).toEqual({ valid: false });
+    expect(result).toEqual({ valid: jasmine.falsy() });
+    expect(undefined).toEqual(jasmine.falsy());
   });
 
   it("marks the run order valid if a node being re-entered allows re-entry", function() {
@@ -178,7 +180,7 @@ describe("TreeProcessor", function() {
     expect(result.valid).toBe(true);
   });
 
-  it("marks the run order valid if a node which can't be re-entered is only entered once", function() {
+  fit("marks the run order valid if a node which can't be re-entered is only entered once", function() {
     var leaf1 = new Leaf(),
         leaf2 = new Leaf(),
         leaf3 = new Leaf(),
@@ -187,7 +189,8 @@ describe("TreeProcessor", function() {
         processor = new jasmineUnderTest.TreeProcessor({ tree: root, runnableIds: [leaf2.id, leaf1.id, leaf3.id] }),
         result = processor.processTree();
 
-    expect(result.valid).toBe(true);
+    // expect(result.valid).toBe(true);
+    expect(result.valid).toEqual(jasmine.truthy());
   });
 
   it("marks the run order valid if a node which can't be re-entered is run directly", function() {
@@ -200,7 +203,7 @@ describe("TreeProcessor", function() {
     expect(result.valid).toBe(true);
   });
 
-  it("runs a single leaf", function() {
+  fit("runs a single leaf", function() {
     var leaf = new Leaf(),
         node = new Node({ children: [leaf], userContext: { root: 'context' } }),
         queueRunner = jasmine.createSpy('queueRunner'),
@@ -218,7 +221,8 @@ describe("TreeProcessor", function() {
 
     queueRunner.calls.mostRecent().args[0].queueableFns[0].fn('foo');
 
-    expect(leaf.execute).toHaveBeenCalledWith('foo', true);
+    // expect(leaf.execute).toHaveBeenCalledWith('foo', true);
+    expect(leaf.execute).toHaveBeenCalledWith('foo', jasmine.truthy());
   });
 
   it("runs a node with no children", function() {
@@ -291,7 +295,7 @@ describe("TreeProcessor", function() {
     expect(leaf2.execute).toHaveBeenCalledWith('bar', true);
   });
 
-  it("runs a disabled node", function() {
+  fit("runs a disabled node", function() {
     var leaf1 = new Leaf(),
         node = new Node({ children: [leaf1], executable: false }),
         root = new Node({ children: [node] }),
@@ -318,7 +322,8 @@ describe("TreeProcessor", function() {
     expect(queueableFns.length).toBe(1);
 
     queueableFns[0].fn('foo');
-    expect(leaf1.execute).toHaveBeenCalledWith('foo', false);
+    // expect(leaf1.execute).toHaveBeenCalledWith('foo', false);
+    expect(leaf1.execute).toHaveBeenCalledWith('foo', jasmine.falsy());
 
     node.getResult.and.returnValue({ im: 'disabled' });
 

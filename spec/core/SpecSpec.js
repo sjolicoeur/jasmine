@@ -123,6 +123,9 @@ describe("Spec", function() {
     expect(fakeQueueRunner).toHaveBeenCalledWith(jasmine.objectContaining({
       isLeaf: true
     }));
+    // expect(fakeQueueRunner).toHaveBeenCalledWith(jasmine.objectContaining({
+    //   isLeaf: jasmine.falsy()
+    // }));
   });
 
   it("is marked pending if created without a function body", function() {

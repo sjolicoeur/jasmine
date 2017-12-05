@@ -77,3 +77,32 @@ Jasmine tests itself across many browsers (Safari, Chrome, Firefox, PhantomJS, a
 * Sheel Choksi
 
 Copyright (c) 2008-2017 Pivotal Labs. This software is licensed under the MIT License.
+
+# TODO
+- falsy
+    - if (false)
+    - if (null)
+    - if (undefined)
+    - if (0)
+    - if (NaN)
+    - if ('')
+    - if ("")
+    - if (document.all) [1]
+- thruthy
+    - if (true)
+    - if ({})
+    - if ([])
+    - if (42)
+    - if ("foo")
+    - if (new Date())
+    - if (-42)
+    - if (3.14)
+    - if (-3.14)
+    - if (Infinity)
+    - if (-Infinity)
+- empty 
+    - {} 
+    - [] 
+- nil 
+    - undefined 
+    - null

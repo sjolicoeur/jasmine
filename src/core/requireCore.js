@@ -60,6 +60,9 @@ var getJasmineRequireObj = (function (jasmineGlobal) {
     j$.NullDiffBuilder = jRequire.NullDiffBuilder(j$);
     j$.ObjectPath = jRequire.ObjectPath(j$);
     j$.GlobalErrors = jRequire.GlobalErrors(j$);
+    //
+    j$.Truthy = jRequire.Truthy(j$);
+    j$.Falsy = jRequire.Falsy(j$);
 
     j$.matchers = jRequire.requireMatchers(jRequire, j$);
 
