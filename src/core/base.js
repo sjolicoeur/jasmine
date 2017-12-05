@@ -122,8 +122,8 @@ getJasmineRequireObj().base = function(j$, jasmineGlobal) {
   j$.anything = function() {
     return new j$.Anything();
   };
-  // j$.truthy = function() {return new j$.Truthy()}
-  // j$.falsy = function() {return new j$.falsy()}
+  j$.truthy = function() {return new j$.Truthy();};
+  j$.falsy = function() {return new j$.Falsy();};
   /**
    * Get a matcher, usable in any {@link matchers|matcher} that uses Jasmine's equality (e.g. {@link matchers#toEqual|toEqual}, {@link matchers#toContain|toContain}, or {@link matchers#toHaveBeenCalledWith|toHaveBeenCalledWith}),
    * that will succeed if the actual value being compared contains at least the keys and values.
